@@ -43,9 +43,12 @@ async function analyzeRepo(owner, repo) {
       if (ageDays < 45) { points += 8; reasons.push("new account"); }
       if (user.public_repos > 50 && user.followers < 3) { points += 8; reasons.push("many repos + very few followers"); }
       if ((user.following ?? 0) > 200 && (user.followers ?? 0) < 5) { points += 8; reasons.push("aggressive following pattern"); }
-      if (user.bio === null && user.name === null) { points += 3; reasons.push("empty profile"); }
+      if (!String(c.login).includes("[bot]") && user.bio === null && user.name === null) { points += 3; reasons.push("empty profile"); }
 
-      return { login: c.login, points, reasons };
+      const forkRatio = await estimateForkRatio(c.login);
+      if (forkRatio >= 0.9) { points += 12; reasons.push(`mostly forks (${Math.round(forkRatio*100)}%)`); }
+
+      return { login: c.login, points, reasons, forkRatio };
     })
   );
 
@@ -119,7 +122,8 @@ async function fetchRepoTree(owner, repo) {
   const files = await Promise.all(candidates.map(async (node) => {
     if (!/\.(ps1|bat|cmd|sh|js|ts|py|yml|yaml)$/i.test(node.path)) return { path: node.path };
     try {
-      const content = await ghText(`/repos/${owner}/${repo}/contents/${encodeURIComponent(node.path)}?ref=${repoData.default_branch}`);
+      const safePath = node.path.split("/").map(encodeURIComponent).join("/");
+      const content = await ghText(`/repos/${owner}/${repo}/contents/${safePath}?ref=${repoData.default_branch}`);
       return { path: node.path, content };
     } catch {
       return { path: node.path };
@@ -127,6 +131,18 @@ async function fetchRepoTree(owner, repo) {
   }));
 
   return files;
+}
+
+
+async function estimateForkRatio(login) {
+  try {
+    const repos = await gh(`/users/${login}/repos?per_page=100&type=owner&sort=updated`);
+    if (!Array.isArray(repos) || repos.length === 0) return 0;
+    const forks = repos.filter((r) => r.fork).length;
+    return forks / repos.length;
+  } catch {
+    return 0;
+  }
 }
 
 async function checkReadme(owner, repo) {
@@ -148,9 +164,10 @@ async function ghText(path) {
 
 
 function confidenceScore(scannedFiles, contributorCount, suspiciousHits) {
-  let score = 25;
-  score += Math.min(40, Math.floor(scannedFiles / 2));
-  score += Math.min(25, contributorCount * 2);
-  score -= Math.min(20, suspiciousHits * 2);
+  let score = 20;
+  score += Math.min(35, Math.floor(scannedFiles / 3));
+  score += Math.min(20, contributorCount);
+  score -= Math.min(25, suspiciousHits * 3);
+  if (scannedFiles < 20) score -= 20;
   return Math.max(5, Math.min(100, score));
 }

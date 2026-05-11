@@ -13,7 +13,7 @@ This extension auto-checks GitHub repositories and gives immediate security-risk
 
 - Repository trust metadata (README/license/issues/description)
 - Popularity anomalies (fork/star mismatch)
-- Contributor-account anomalies (new account, follower/following behavior, weak profile)
+- Contributor-account anomalies (new account, follower/following behavior, weak profile, mostly-fork accounts)
 - Suspicious script patterns (`curl|bash`, encoded PowerShell, risky downloader patterns)
 
 ## Install
