@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repo Risk Signals</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Repo Risk Signals</h1>
+      <p id="status">Open a GitHub repository page and click Analyze.</p>
+      <button id="analyze">Analyze current repo</button>
+      <section id="summary" hidden>
+        <h2>Summary</h2>
+        <p id="score"></p>
+      </section>
+      <section id="signals" hidden>
+        <h2>Signals</h2>
+        <ul id="signal-list"></ul>
+      </section>
+      <small>
+        This extension gives <strong>heuristics</strong>, not proof of malware.
+        Always verify manually and use static/dynamic analysis tools.
+      </small>
+    </main>
+    <script src="popup.js" type="module"></script>
+  </body>
+</html>
