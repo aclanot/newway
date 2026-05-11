@@ -1,0 +1,38 @@
+:root {
+  font-family: Arial, sans-serif;
+}
+body {
+  width: 340px;
+  margin: 0;
+  padding: 12px;
+}
+h1 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+h2 {
+  font-size: 14px;
+  margin: 12px 0 6px;
+}
+button {
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#score {
+  font-weight: bold;
+}
+ul {
+  padding-left: 18px;
+}
+li.high { color: #b00020; }
+li.medium { color: #9c6b00; }
+li.low { color: #444; }
+small {
+  display: block;
+  color: #555;
+  margin-top: 10px;
+}
