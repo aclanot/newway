@@ -62,11 +62,19 @@ async function analyzeRepo(owner, repo) {
 
   if (signals.length === 0) addSignal("low", "No obvious red flags from current checks.", 0);
 
+  const normalizedRisk = Math.min(100, riskScore);
+  const confidenceValue = confidenceScore(treeFiles.length, contributors.length, suspiciousFileHits.length);
+
   return {
     owner,
     repo,
-    riskScore: Math.min(100, riskScore),
+    riskScore: normalizedRisk,
+    confidence: {
+      value: confidenceValue,
+      label: confidenceValue >= 75 ? "High" : confidenceValue >= 45 ? "Medium" : "Low"
+    },
     signals,
+    contributors: contributorChecks.sort((a,b)=>b.points-a.points),
     checkedFiles: treeFiles.length
   };
 
@@ -136,4 +144,13 @@ async function ghText(path) {
   const data = await gh(path);
   if (!data.content) return "";
   return atob(data.content.replace(/\n/g, ""));
+}
+
+
+function confidenceScore(scannedFiles, contributorCount, suspiciousHits) {
+  let score = 25;
+  score += Math.min(40, Math.floor(scannedFiles / 2));
+  score += Math.min(25, contributorCount * 2);
+  score -= Math.min(20, suspiciousHits * 2);
+  return Math.max(5, Math.min(100, score));
 }

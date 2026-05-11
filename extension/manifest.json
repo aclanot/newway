@@ -3,16 +3,28 @@
   "name": "Repo Risk Signals",
   "version": "0.2.0",
   "description": "Automatically flags GitHub repository security and contributor risk signals.",
-  "permissions": ["activeTab", "storage"],
-  "host_permissions": ["https://api.github.com/*", "https://github.com/*"],
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://api.github.com/*",
+    "https://github.com/*"
+  ],
   "background": {
-    "service_worker": "background.js",
-    "type": "module"
+    "scripts": [
+      "background.js"
+    ]
   },
   "content_scripts": [
     {
-      "matches": ["https://github.com/*/*", "https://github.com/*/*/*"],
-      "js": ["content.js"],
+      "matches": [
+        "https://github.com/*/*",
+        "https://github.com/*/*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
       "run_at": "document_idle"
     }
   ],

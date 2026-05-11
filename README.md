@@ -1,19 +1,20 @@
 # Repo Risk Signals (Chrome Extension)
 
-This extension now works automatically on GitHub repository pages.
+This extension auto-checks GitHub repositories and gives immediate security-risk hints.
 
-## What is improved
+## What you get now
 
-- Auto-injects a **Repo Risk Signals** panel directly in the repository page.
-- Scans repository metadata, contributor-account anomalies, and common suspicious script patterns.
-- Shows a 0-100 risk score with explainable findings.
+- Automatic in-page risk panel when you open a repo.
+- Clear risk score (0-100) and confidence score.
+- Contributor drill-down (why each account looks normal or suspicious).
+- Script-pattern scan for common malware delivery commands.
 
-## Checks currently included
+## Signal categories
 
-- Repo transparency and trust markers (README, license, issues enabled).
-- Star/fork distribution anomalies.
-- Contributor anomalies (new accounts, extreme following ratio, weak reputation profile).
-- Pattern scan for suspicious commands in script files (e.g., encoded PowerShell and `curl|bash`).
+- Repository trust metadata (README/license/issues/description)
+- Popularity anomalies (fork/star mismatch)
+- Contributor-account anomalies (new account, follower/following behavior, weak profile)
+- Suspicious script patterns (`curl|bash`, encoded PowerShell, risky downloader patterns)
 
 ## Install
 
@@ -21,6 +22,6 @@ This extension now works automatically on GitHub repository pages.
 2. Enable **Developer mode**
 3. Click **Load unpacked** and select `extension/`
 
-## Important
+## Limitation
 
-This is heuristic detection, not definitive malware classification.
+This is heuristic triage, not guaranteed malware detection.

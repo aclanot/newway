@@ -35,7 +35,7 @@ function renderReport(report) {
   summaryEl.hidden = false;
   signalsEl.hidden = false;
   const level = report.riskScore >= 60 ? "HIGH" : report.riskScore >= 30 ? "MEDIUM" : "LOW";
-  scoreEl.textContent = `Risk score: ${report.riskScore}/100 (${level})`;
+  scoreEl.textContent = `Risk score: ${report.riskScore}/100 (${level}) • Confidence ${report.confidence.label} (${report.confidence.value}/100)`;
 
   signalListEl.innerHTML = "";
   for (const signal of report.signals) {
