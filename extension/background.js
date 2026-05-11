@@ -146,12 +146,14 @@ async function estimateForkRatio(login) {
 }
 
 async function checkReadme(owner, repo) {
-  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, { headers: { Accept: "application/vnd.github+json" } });
+  const headers = await githubHeaders();
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, { headers });
   return res.ok;
 }
 
 async function gh(path) {
-  const resp = await fetch(`https://api.github.com${path}`, { headers: { Accept: "application/vnd.github+json" } });
+  const headers = await githubHeaders();
+  const resp = await fetch(`https://api.github.com${path}`, { headers });
   if (!resp.ok) throw new Error(`GitHub API error ${resp.status} for ${path}`);
   return resp.json();
 }
@@ -170,4 +172,12 @@ function confidenceScore(scannedFiles, contributorCount, suspiciousHits) {
   score -= Math.min(25, suspiciousHits * 3);
   if (scannedFiles < 20) score -= 20;
   return Math.max(5, Math.min(100, score));
+}
+
+
+async function githubHeaders() {
+  const data = await chrome.storage.local.get(["githubToken"]);
+  const headers = { Accept: "application/vnd.github+json" };
+  if (data.githubToken) headers.Authorization = `Bearer ${data.githubToken}`;
+  return headers;
 }

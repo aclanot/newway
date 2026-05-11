@@ -25,3 +25,10 @@ This extension auto-checks GitHub repositories and gives immediate security-risk
 ## Limitation
 
 This is heuristic triage, not guaranteed malware detection.
+
+
+## GitHub token (optional)
+
+- Open extension settings (Details -> Extension options).
+- Add a GitHub Personal Access Token to raise API rate limits.
+- Required permissions are already present: `storage` (save token locally) and `https://api.github.com/*` in host permissions (send authenticated API requests).
